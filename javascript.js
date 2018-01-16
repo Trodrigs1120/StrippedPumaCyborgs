@@ -1,117 +1,144 @@
-var GiphyTopics = ["Puppies", "School", "Snow", "Music", "Anime", "vaporwave", "terry crews", "its always sunny", "simpsons", "birdemic"];
+var SearchableTopics =["BAuthor", "BTitle","BISBN" , "MArtist" , "MAlbum" , "MTrack"];
 var Button;
 var IsEmpty = true;
-var APIKey = "CnAbpuLShr8j8ofdJmQRIRf53J2I0b47"
+var APIKey = ""
 
 
 
 $(document).ready(function () {
-    for(var i=0; i<GiphyTopics.length;i++) {
-    Button=$("<button>");
-    Button.addClass("Button"+i);
-    Button.attr("ArraySlot", i );
-    Button.addClass("Click")
-    $(".ButtonHolder").append(Button);
-    $(".Button"+i).append(GiphyTopics[i])
-    }
-
-$(".Click").on("click", function(){
-var ArraySlot = ($(this).attr("ArraySlot"))
-
-queryURL = "https://api.giphy.com/v1/gifs/search?q="+GiphyTopics[ArraySlot]+"&api_key="+APIKey+"&limit=10";
-$.ajax({
-    url: queryURL,
-    method: "GET"
-    }).done(function(response) {
-        
-        if (IsEmpty===false){ 
-            $(".GiphyGoesHere").empty();    
-            
-            } else {
-                IsEmpty=false;
-
-            }
-        for (var i=0; i<response.data.length; i++){
-            GiphyDiv= $("<div>");
-            GiphyDiv.addClass("SizeAdjust");
-            GiphyDiv.addClass("Gif"+i);
-            GiphyImage= $("<img>");
-            GiphyImage.attr("width", 200)
-            GiphyImage.attr("height", 200)
-            GiphyImage.addClass("gif")
-            $(".GiphyGoesHere").append(GiphyDiv);
-            $(".Gif"+i).append(GiphyImage);
-            $(".Gif"+i).append("<p class=rating> Rating: "+response.data[i].rating+"</p>");
-            GiphyImage.attr("src", response.data[i].images.fixed_height_still.url)
-            
-            
-            }
-})
-
-})
-
-
-$("#AddTopic").on("click", function() {
-i=GiphyTopics.length;
-var KeyWord = $("#keyword").val();
-GiphyTopics[i]=KeyWord;
-
-var btn = document.createElement('button');
-var wrapper = document.createElement('div');
-wrapper.appendChild(btn);
-btn.classList.add("Button"+i);
-btn.classList.add("Click");
-btn.setAttribute("ArraySlot", i );
-$("#Move").append(wrapper);
-var buttons = wrapper.getElementsByTagName("BUTTON");
-$(".Button"+i).append(GiphyTopics[i])
-
-buttons[0].onclick = function(){ 
-    var ArraySlot = ($(this).attr("ArraySlot"))
-    queryURL = "https://api.giphy.com/v1/gifs/search?q="+GiphyTopics[ArraySlot]+"&api_key="+APIKey+"&limit=10";
     
+    $(".DropDown").on("click", function(){
+    
+    })
+// We're pulling the ISBN, book title, author, average rating? from google books
+$("#Click").on("click", function(){
+
+if($('#Click').hasClass('BAuthor')) {
+    
+}
+if($('#Click').hasClass('BTitle')) {
+    GoogleBooksTitle();
+    
+}
+if($('#Click').hasClass('BISBN')) {
+    GoogleBooksISBN()
+}
+
+})
+function GoogleBooksTitle(){
+    var SearchVariable = $("#SearchTerm").val();
+    console.log(SearchVariable)
+    queryURL = "https://www.googleapis.com/books/v1/volumes?q="+SearchVariable
+    console.log(queryURL)
     $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).done(function(response) {
+            var ISBN13=response.items[0].volumeInfo.industryIdentifiers[0].identifier;
+            var ISBN10=response.items[0].volumeInfo.industryIdentifiers[1].identifier;
+            var Author=response.items[0].volumeInfo.authors[0]
+            var Title=response.items[0].volumeInfo.title
+            var Image=response.items[0].volumeInfo.imageLinks.thumbnail
+            // next to it in the array are bigger images for the full book page
+            // In case we need either ISBN
+            console.log ("ISBN 13 and 10")
+            console.log (ISBN13)  
+            console.log (ISBN10)
+            console.log(Author)
+            console.log(response.items[0].volumeInfo.imageLinks.thumbnail)
+           console.log(Title)
+});
+}
+function GoogleBooksISBN(){
+    var SearchVariable = $("#SearchTerm").val();
+    console.log(SearchVariable)
+    queryURL = "https://www.googleapis.com/books/v1/volumes?q=isbn:0060007761"
+    console.log(queryURL)
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).done(function(response) {
+            var ISBN13=response.items[0].volumeInfo.industryIdentifiers[0].identifier;
+            var ISBN10=response.items[0].volumeInfo.industryIdentifiers[1].identifier;
+            var Author=response.items[0].volumeInfo.authors[0]
+            var Title=response.items[0].volumeInfo.title
+            var Image=response.items[0].volumeInfo.imageLinks.thumbnail
+            // next to it in the array are bigger images for the full book page
+            // In case we need either ISBN
+            console.log ("ISBN 13 and 10")
+            console.log (ISBN13)  
+            console.log (ISBN10)
+            console.log(Author)
+            console.log(response.items[0].volumeInfo.imageLinks.thumbnail)
+           console.log(Title)
+                                    })
+}
+
+
+// Unused for now 
+function GetBookData(){
     
-    url: queryURL,
-    method: "GET"
-    }).done(function(response) {
-        console.log(response);
-        
-        if (IsEmpty===false){
-            $(".GiphyGoesHere").empty();    
-            
-            } else {
-                IsEmpty=false;
+    // run a for loop for 3 to get the first 3 searchs add an id of 0 1 or 2 for selecting search results?
+    var ISBN13=response.items[0].volumeInfo.industryIdentifiers[0].identifier;
+    var ISBN10=response.items[0].volumeInfo.industryIdentifiers[1].identifier;
+    var Author=response.items[0].volumeInfo.authors[0]
+    var Title=response.items[0].volumeInfo.title
+    var Image=response.items[0].volumeInfo.imageLinks.thumbnail
+    // next to it in the array are bigger images for the full book page
+    // In case we need either ISBN
+    console.log ("ISBN 13 and 10")
+    console.log (ISBN13)  
+    console.log (ISBN10)
+    console.log(Author)
+    console.log(response.items[0].volumeInfo.imageLinks.thumbnail)
+   console.log(Title)
 
-            }
-        for (var i=0; i<response.data.length; i++){
-            GiphyDiv= $("<div>");
-            GiphyDiv.addClass("SizeAdjust");
-            GiphyDiv.addClass("Gif"+i);
-            GiphyImage= $("<img>");
-            GiphyImage.attr("width", 200)
-            GiphyImage.attr("height", 200)
-            GiphyImage.addClass("gif")
-            $(".GiphyGoesHere").append(GiphyDiv);
-            $(".Gif"+i).append(GiphyImage);
-            $(".Gif"+i).append("<p class=rating> Rating: "+response.data[i].rating+"</p>");
-            GiphyImage.attr("src", response.data[i].images.fixed_height_still.url)
-            }
-})  }
+}
+// These change the button to indicate we're searching by something
+// We'll add an ID to it to specify which function/api we'll be using for searching and giving back data
+$("#BAuthor").on("click", function(){
+   $("#Filter").empty()
+   $("#Filter").append("Author")
+   RemoveClass()
+   $("#Click").addClass("BAuthor")
+})
+$("#BISBN").on("click", function(){ 
+   $("#Filter").empty()
+   $("#Filter").append("ISBN")
+   RemoveClass()
+   $("#Click").addClass("BISBN")
+})
+$("#BTitle").on("click", function(){
+   $("#Filter").empty()
+   $("#Filter").append("Title")
+   RemoveClass()
+   $("#Click").addClass("BTitle")
+})
+$("#MArtist").on("click", function(){
+    $("#Filter").empty()
+    $("#Filter").append("Artist")
+    RemoveClass()
+    $("#Click").addClass("MArtist")
+ })
+ $("#MAlbum").on("click", function(){
+    $("#Filter").empty()
+    $("#Filter").append("Album")
+    RemoveClass()
+    $("#Click").addClass("MAlbum")
+ })
+ // Place holder in case we do searches by track
+ $("#MTrack").on("click", function(){
+    $("#Filter").empty()
+    $("#Filter").append("Title")
+    RemoveClass()
+    $("#Click").addClass("MTrack")
+ })
+function RemoveClass(){
+    for (var i=0; i<SearchableTopics.length;i++){
+        $("#Click").removeClass(SearchableTopics[i]);
+    }
+    
+}
+})
 
-}); 
-
-$('body').on('click', '.gif', function() {
-    var src = $(this).attr("src");
-  if($(this).hasClass('playing')){
-     //stop
-     $(this).attr('src', src.replace(/\.gif/i, "_s.gif"))
-     $(this).removeClass('playing');
-  } else {
-    //play
-    $(this).addClass('playing');
-    $(this).attr('src', src.replace(/\_s.gif/i, ".gif"))
-  }
-});
-});
 

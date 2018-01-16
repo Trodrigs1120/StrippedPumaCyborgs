@@ -7,12 +7,24 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>        
         <!-- Jquery -->
     </head>
-     <!--    <script type="text/javascript" src="javascript.js"></script>
-     --> </head>
+         <script type="text/javascript" src="javascript.js"></script>
+     </head>
 <body>
         <label for="comment">Search for a book/music artist. Will add drop downs and or selectors to specify if searching artist, book, song, et cetera</label>
-        <textarea class="form-control" rows="1" ></textarea>
-        <div class="btn-default" id="AddTopic"><span class="glyphicon glyphicon-search"></span> Add Button</div>
+        <textarea class="form-control" rows="1" id="SearchTerm" ></textarea>
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Search by<p id="Filter">...</p></button>
+              <div id="myDropdown" class="dropdown-content">
+                <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                <button id="BAuthor"><p>Book Author</p> </button>
+                <button id="BTitle"><p>Book Title</p></button>
+                <button id="BISBN"><p>Book ISBN</p></button>
+                <button id="MArtist"><p>Musical Artist</p></button>
+                <button id="MAlbum"><p>Album</p></button>
+                <button id="MTrack"><p>MusicTrack?</p></button>
+              </div>
+            </div>
+        <div class="btn-default" id="Click"><span class=""></span> Search</div>
     
     <div class="container">
     <div class="row">
@@ -21,44 +33,9 @@
                       <div class="panel-body ButtonHolder"</div>
                             <div class="panel-body GiphyGoesHere"> 
                                     <div class="col-md-10">
-                                            <img src="images/wave.jpg" height= 300px width = 300px;>
-                                      
-                                        <p class="floatright"> Wave by Antonio Jobim<br>
-                                        Off the album Wave
-                                    <br>
-                                    <br>
-                                Track List goes here?
-                                <br>
-                            1. Wave
-                            <br>
-                
-                            2. The red blouse
-                            <br>
-                            3. Look to the sky 
-                            <br>
-                        
-                            4. batindha
-                            <br>
-                            5.Triste</p>
-                                        <br>
-                                        <audio class="floatright" preload="auto" tabindex="0" controls="controls">
-                                                <source src="assets/music/Voyager.ogg" type="audio/ogg" />
-                                               Your browser does not support the audio element. 
-                                               </audio>
-                                               
-                                                <br>
-                                                <p>Find this on: </p>
-                                               <a href="apple.com">Itunes</a> 
-                                               <br>
-                                               <a href="spotify.com">Spotify</a> 
-                                               <br>
-                                               <a href="goodreads.com">GoodReads</a> 
-                                               <br>
-                                               <a href="books.google.com">Google Books</a>
-
+                                          <button class="Click"><p>test</p> </button>
                                         </div>
-                                        
-                             </div>
+                                         </div>
                              
                            </div>
                            
@@ -73,11 +50,8 @@
                                             <div class="panel-body ButtonHolder"</div>
                                                   <div class="panel-body GiphyGoesHere"> 
                                                           <div class="col-md-5">
-                                                                  
-                                                              <p> Reviews from good reads, itunes et cetera</p>
-                                                              <p>From: Tom- * I thought it was terrible</p>
-                                                              <p>From: Jerry-  ***** I really like jazz music</p>
-                                                              </div>
+                                                              Reviews go here
+                                                           </div>
                                                               
                                                    </div>
                                                    
@@ -94,5 +68,12 @@
     -->
     </div>
  </div>
+ <script>
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+    </script>
 </body>
 </html>
