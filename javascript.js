@@ -19,7 +19,7 @@ $("#Click").on("click", function(){
 })
 function GoogleBooksAPI(){
     var SearchVariable = $("#SearchTerm").val();
-    queryURL = ""
+    
     if($('#Click').hasClass('BAuthor')) {
         queryURL = "https://www.googleapis.com/books/v1/volumes?q=inauthor:"+SearchVariable
     }
@@ -42,6 +42,7 @@ function GoogleBooksAPI(){
             var Author=response.items[i].volumeInfo.authors[0]
             var Title=response.items[i].volumeInfo.title
             var Image=response.items[i].volumeInfo.imageLinks.thumbnail
+         // trying something with this line
             var Rating=response.items[i].volumeInfo.averageRating
             console.log(Rating)
             // next to it in the array are bigger images for the full book page
@@ -70,7 +71,7 @@ function GoogleBooksAPI(){
 
             $(".Button"+i).append('<p> Title: '+Title+'</p>')
            // Commented out for now. need a better button/href for the link to the "whole page"
-           //$(".PageBody").append('<p> Title: '+Title+'</p>')
+
             $(".PageBody").append('<p> Author: '+Author)
             $(".PageBody").append('<p> ISBN: '+ISBN10)
            
@@ -90,21 +91,15 @@ function LargeView(){
     $(".PageBody").empty()
    $(".PageBody").append($('<div />', {
     class: 'col-md-6',
-    id: 'Art'
-    }));
+    id: 'Art'    }));
     $(".PageBody").append($('<div />', {
         class: 'col-md-6',
-        id: 'Content'
-        }));
+        id: 'Content'   }));
     $(".PageBody").append($('<div />', {
-        class: 'col-md-6',
-        id: 'Reviews'
-    }));        
-   
-
-   console.log(ItemValue)
-// if we run into search issues we can change the query to search by ISBN which should give us a 99% chance of getting the right book
-   $.ajax({
+        class: 'col-md-12',
+        id: 'Links' }));        
+ 
+    $.ajax({
     url: queryURL,
     method: "GET"
     }).done(function(response) {
@@ -117,16 +112,26 @@ function LargeView(){
         var Rating=response.items[ItemValue].volumeInfo.averageRating
         var BuyLink=response.items[ItemValue].saleInfo.buyLink
         var IsFiction=response.items[ItemValue].volumeInfo.categories[0]
+        if (response.items[ItemValue].saleInfo.saleability=="NOT_FOR_SALE"){
+        
+        } else {
+            var SalePrice=response.items[ItemValue].saleInfo.listPrice.amount
+        }
+        
         console.log(Rating + BuyLink)
         console.log(IsFiction)
         $("#Art").append('<img id="theImg" src='+Image+' />');
         // art image is a little small. Use ISBN number to fetch bigger one?
         $("#Content").append('<p>'+Title +'</p>'+'<p>'+IsFiction+'</p>'+'<p> Brief description:<br>'+Description+'<p>')
         if (Rating!=undefined){
-        $("#Content").append('<p> Average Rating: '+Rating+' stars</p>')
-        }
-        })
+            $("#Content").append('<p> Average Rating: '+Rating+' stars</p>')
+                                 }
+        if (BuyLink!=undefined || SalePrice!=undefined){
+            $("#Links").append('<p>Buy on </p>')
+            $("#Links").append('<a href='+BuyLink+'> Google Play Store</a> '+SalePrice)
+                                }
     
+                                })
 }
     
 
