@@ -16,7 +16,6 @@
         <div class="dropdown">
             <button onclick="myFunction()" class="dropbtn">Search by<p id="Filter">...</p></button>
               <div id="myDropdown" class="dropdown-content">
-                <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
                 <button id="BAuthor"><p>Book Author</p> </button>
                 <button id="BTitle"><p>Book Title</p></button>
                 <button id="BISBN"><p>Book ISBN</p></button>
@@ -32,12 +31,13 @@
     <div class="row">
                     <div class="panel panel-default">
                       
-                      <div class="panel-body"</div>
-                            
-                                    <div class="col-md-10 PageBody">
+                      <div class="panel-body">
+                          <div class="col-md-10 PageBody">
                                           
-                                        </div>
-                                         </div>
+                          </div>
+                      </div>
+                                    
+                    </div>
                              
                         
                            
@@ -52,7 +52,8 @@
                                             <div class="panel-body ButtonHolder"</div>
                                                   <div class="panel-body GiphyGoesHere"> 
                                                           <div class="col-md-5">
-                                                              Reviews go here
+                                                              Reviews go here, google books doesnt seem to have a place to scrape reviews though
+                                                              get another book api and search the book by ISBN and then get reviews?
                                                            </div>
                                                               
                                                    </div>
@@ -62,12 +63,7 @@
                                                 </div>
                                        </div>
                                        </div>
-    <div class="col-md-3 form-group panel-body">
-        
-    <!--    <label for="comment">Add a tag:</label>
-        <textarea class="form-control" rows="1" id="keyword"></textarea>
-        <div class="btn-default" id="AddTopic"><span class="glyphicon glyphicon-search"></span> Add Button</div>
-    -->
+    
     </div>
  </div>
  <script>
