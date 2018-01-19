@@ -4,11 +4,18 @@ var ItemValue="";
 var APIKey = ""
 
 
-
 $(document).ready(function () {
-    
+
+    //    queryURL="https://www.goodreads.com/book/review_counts.json?isbns=0441172717%2C0141439602&key=YaRPBzHk1CdOfh7JjERcfg"
+
+ //   $.ajax({
+ //       url: queryURL,
+ //       method: "GET"
+ //       }).done(function(response) {
+ //       console.log(reponse)
+ //       })
     $(".DropDown").on("click", function(){
-    
+    // this does nothing at this time
     })
 // We're pulling the ISBN, book title, author, average rating? from google books
 $("#Click").on("click", function(){
@@ -17,9 +24,9 @@ $("#Click").on("click", function(){
 
 
 })
+
 function GoogleBooksAPI(){
     var SearchVariable = $("#SearchTerm").val();
-    
     if($('#Click').hasClass('BAuthor')) {
         queryURL = "https://www.googleapis.com/books/v1/volumes?q=inauthor:"+SearchVariable
     }
@@ -42,7 +49,6 @@ function GoogleBooksAPI(){
             var Author=response.items[i].volumeInfo.authors[0]
             var Title=response.items[i].volumeInfo.title
             var Image=response.items[i].volumeInfo.imageLinks.thumbnail
-         // trying something with this line
             var Rating=response.items[i].volumeInfo.averageRating
             console.log(Rating)
             // next to it in the array are bigger images for the full book page
@@ -68,10 +74,10 @@ function GoogleBooksAPI(){
             // Takes the array slot of the book. We can rerun the query for only that array slot
              LargeView()
             }     
+            // need a better button/href for the link to the "whole page"
 
             $(".Button"+i).append('<p> Title: '+Title+'</p>')
-           // Commented out for now. need a better button/href for the link to the "whole page"
-
+           
             $(".PageBody").append('<p> Author: '+Author)
             $(".PageBody").append('<p> ISBN: '+ISBN10)
            
@@ -89,7 +95,7 @@ function GoogleBooksAPI(){
 // going to try to imitate bootstrap divs and classes to see how it all goes
 function LargeView(){
     $(".PageBody").empty()
-   $(".PageBody").append($('<div />', {
+    $(".PageBody").append($('<div />', {
     class: 'col-md-6',
     id: 'Art'    }));
     $(".PageBody").append($('<div />', {
@@ -174,6 +180,7 @@ $("#MArtist").on("click", function(){
     RemoveClass()
     $("#Click").addClass("MTrack")
  })
+ // this removes all classes that could mess up our search
 function RemoveClass(){
     for (var i=0; i<SearchableTopics.length;i++){
         $("#Click").removeClass(SearchableTopics[i]);
