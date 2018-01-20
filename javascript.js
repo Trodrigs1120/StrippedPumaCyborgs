@@ -6,18 +6,54 @@ var ISBN13=""
 var ISBN10=""
 var GrID=""
 var CorsIsDumb="https://cors-anywhere.herokuapp.com/"
+//global scope for testing
+var Author=""
+var Title=""
 $(document).ready(function () {
-
+    
 // We're pulling the ISBN, book title, author, average rating? from google books
 $("#Click").on("click", function(){
     $(".PageBody").empty();
-    GoogleBooksAPI()
+   GoogleBooksAPI()
 
 
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function GoogleBooksAPI(){
-    var SearchVariable = $("#SearchTerm").val();
+    var InitialTerm = $("#SearchTerm").val();
+    var SearchVariable = InitialTerm.replace(" ", "+");
     if($('#Click').hasClass('BAuthor')) {
         queryURL = "https://www.googleapis.com/books/v1/volumes?q=inauthor:"+SearchVariable
     }
@@ -27,7 +63,6 @@ function GoogleBooksAPI(){
     if($('#Click').hasClass('BISBN')) {
         queryURL = "https://www.googleapis.com/books/v1/volumes?q=isbn:"+SearchVariable
     }
-    var SearchVariable = $("#SearchTerm").val();
     console.log(SearchVariable)
     console.log(queryURL)
     $.ajax({
@@ -36,15 +71,20 @@ function GoogleBooksAPI(){
         }).done(function(response) {
             for (var i = 0; i<5; i++ ){
                 console.log()
-            var ISBN13=response.items[i].volumeInfo.industryIdentifiers[0].identifier;
+            ISBN13=response.items[i].volumeInfo.industryIdentifiers[0].identifier;
             // Declared this is global scope because we need to pass it to other functions
           //  if (response.items[i].volumeInfo.industryIdentifiers[1].identifier!=undefined){
-               ISBN10=response.items[i].volumeInfo.industryIdentifiers[1].identifier;
+          //     ISBN10=response.items[i].volumeInfo.industryIdentifiers[1].identifier;
           //  }
            
             var Author=response.items[i].volumeInfo.authors[0]
             var Title=response.items[i].volumeInfo.title
-            var Image=response.items[i].volumeInfo.imageLinks.thumbnail
+            if(response.items[i].volumeInfo.imageLinks!=undefined){
+                var Image=response.items[i].volumeInfo.imageLinks.thumbnail
+            }
+            else{
+                var Image="images/book.gif" 
+            } 
             var Rating=response.items[i].volumeInfo.averageRating
             // next to it in the array are bigger images for the full book page
             // In case we need either ISBN
@@ -74,7 +114,7 @@ function GoogleBooksAPI(){
             $(".Button"+i).append('<p> Title: '+Title+'</p>')
            
             $(".PageBody").append('<p> Author: '+Author)
-            $(".PageBody").append('<p> ISBN: '+ISBN10)
+            $(".PageBody").append('<p> ISBN: '+ISBN13)
            
            if (Rating!=undefined){
             $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
@@ -105,15 +145,22 @@ function LargeView(){
     url: queryURL,
     method: "GET"
     }).done(function(response) {
-        var ISBN13=response.items[ItemValue].volumeInfo.industryIdentifiers[0].identifier;
-        
-        var Author=response.items[ItemValue].volumeInfo.authors[0]
-        var Title=response.items[ItemValue].volumeInfo.title
-        var Image=response.items[ItemValue].volumeInfo.imageLinks.thumbnail
+        console.log("LargeView Query")
+        console.log(response)
+         ISBN13=response.items[ItemValue].volumeInfo.industryIdentifiers[0].identifier;
+         Author=response.items[ItemValue].volumeInfo.authors[0]
+         Title=response.items[ItemValue].volumeInfo.title
+         if(response.items[ItemValue].volumeInfo.imageLinks!=undefined){
+            var Image=response.items[ItemValue].volumeInfo.imageLinks.thumbnail
+        }
+        else{
+            var Image="images/book.gif" 
+        } 
         var Description=response.items[ItemValue].volumeInfo.description
         var Rating=response.items[ItemValue].volumeInfo.averageRating
         var BuyLink=response.items[ItemValue].saleInfo.buyLink
         var IsFiction=response.items[ItemValue].volumeInfo.categories[0]
+        GoodReadsSearch()
         if (response.items[ItemValue].saleInfo.saleability=="NOT_FOR_SALE"){
         
         } else {
@@ -134,16 +181,19 @@ function LargeView(){
         
                                 })
         //  running good reads to get ratings from there and use the ISBN from here
-        GoodReadsGetGrID()
+      //  GoodReadsGetGrID()
+      
         
 }
 
 function GoodReadsGetGrID(){
     console.log("Good Reads Get GR ID ran")
-    queryURL= CorsIsDumb+"https://www.goodreads.com/book/review_counts.json?isbns="+ISBN10+"&key="+GoodReadsAPIKey;
+    
+  //  queryURL= CorsIsDumb+"https://www.goodreads.com/book/review_counts.json?isbns="+ISBN13+"&key="+GoodReadsAPIKey;
+    queryURL= CorsIsDumb+"https://www.goodreads.com/book/review_counts.json?isbns="+ISBN13+"&key="+GoodReadsAPIKey;
     console.log(queryURL)
     // after ISBN13 you can add %2C to include more books if needed
-    //queryURL=CorsIsDumb+"https://www.goodreads.com/book/isbn/"+ISBN10+"?key=YaRPBzHk1CdOfh7JjERcfg"
+    
 $.ajax({
     url: queryURL,
     method: "GET"
@@ -151,8 +201,31 @@ $.ajax({
     GrID=response.books[0].id
     console.log(GrID)
 
-    GoodReadsGetReviews();
+   // GoodReadsGetReviews();
+   
 })
+
+}
+function GoodReadsSearch(){
+    console.log(Author +" <-- Author  Title---> "+ Title)
+    //queryURL = CorsIsDumb+"https://www.goodreads.com/search/index.xml?key="+GoodReadsAPIKey+"&q=Ender%27s+Game"
+     queryURL = CorsIsDumb+"https://www.goodreads.com/book/title.json?author="+Author+"&key=YaRPBzHk1CdOfh7JjERcfg&title="+Title
+    console.log("GoodReadsSearch")
+    console.log(queryURL)
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).done(function(response) {
+            console.log(response)
+           
+        //    var AppendHTML = response.documentElement.children[0].outerHTML
+        var AppendHTML=response.reviews_widget
+        //    console.log(AppendHTML)
+        $("#Reviews").empty()
+        $("#Reviews").append("Please note: Reviews are for all editions of a given book.")
+            $("#Reviews").append(AppendHTML)
+        })
 
 }
 function GoodReadsGetReviews(){
@@ -165,9 +238,11 @@ function GoodReadsGetReviews(){
         }).done(function(response) {
     console.log(response)
     var test=response.documentElement.children[1].childNodes[55].innerHTML
+    // vartest2=response.documenmtElement.children[0]innerHTML
     var Rating="";
     newtest= test.substr(16);
     newertest = newtest.substr(0, newtest.length-10);
+    $("#Reviews").empty()
     $("#Reviews").append("Please note: Reviews are for all editions of a given book."+ newertest)
     $("#Content").append('<p> Average Rating on Google Books: '+Rating+' stars</p>')
         })
