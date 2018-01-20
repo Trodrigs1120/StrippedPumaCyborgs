@@ -1,18 +1,13 @@
 var SearchableTopics =["BAuthor", "BTitle","BISBN" , "MArtist" , "MAlbum" , "MTrack"];
-//var Button;
+
 var ItemValue="";
 var GoodReadsAPIKey = "YaRPBzHk1CdOfh7JjERcfg"
 var ISBN13=""
 var ISBN10=""
-// may not need this at all
 var GrID=""
 var CorsIsDumb="https://cors-anywhere.herokuapp.com/"
 $(document).ready(function () {
 
-    
-    $(".DropDown").on("click", function(){
-    // this does nothing at this time
-    })
 // We're pulling the ISBN, book title, author, average rating? from google books
 $("#Click").on("click", function(){
     $(".PageBody").empty();
@@ -135,9 +130,10 @@ function LargeView(){
             $("#Links").append('<p>Buy on </p>')
             $("#Links").append('<a href='+BuyLink+'> Google Play Store</a> '+SalePrice)
                                 }
-        //  running good reads to get ratings from there and use the ISBN from here
+       
         
                                 })
+        //  running good reads to get ratings from there and use the ISBN from here
         GoodReadsGetGrID()
         
 }
