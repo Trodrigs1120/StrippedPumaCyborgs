@@ -1,19 +1,15 @@
 var SearchableTopics =["BAuthor", "BTitle","BISBN" , "MArtist" , "MAlbum" , "MTrack"];
 //var Button;
 var ItemValue="";
-var APIKey = ""
-
-
+var GoodReadsAPIKey = "YaRPBzHk1CdOfh7JjERcfg"
+var ISBN13=""
+var ISBN10=""
+// may not need this at all
+var GrID=""
+var CorsIsDumb="https://cors-anywhere.herokuapp.com/"
 $(document).ready(function () {
 
-    //    queryURL="https://www.goodreads.com/book/review_counts.json?isbns=0441172717%2C0141439602&key=YaRPBzHk1CdOfh7JjERcfg"
-
- //   $.ajax({
- //       url: queryURL,
- //       method: "GET"
- //       }).done(function(response) {
- //       console.log(reponse)
- //       })
+    
     $(".DropDown").on("click", function(){
     // this does nothing at this time
     })
@@ -44,13 +40,17 @@ function GoogleBooksAPI(){
         method: "GET"
         }).done(function(response) {
             for (var i = 0; i<5; i++ ){
+                console.log()
             var ISBN13=response.items[i].volumeInfo.industryIdentifiers[0].identifier;
-            var ISBN10=response.items[i].volumeInfo.industryIdentifiers[1].identifier;
+            // Declared this is global scope because we need to pass it to other functions
+          //  if (response.items[i].volumeInfo.industryIdentifiers[1].identifier!=undefined){
+               ISBN10=response.items[i].volumeInfo.industryIdentifiers[1].identifier;
+          //  }
+           
             var Author=response.items[i].volumeInfo.authors[0]
             var Title=response.items[i].volumeInfo.title
             var Image=response.items[i].volumeInfo.imageLinks.thumbnail
             var Rating=response.items[i].volumeInfo.averageRating
-            console.log(Rating)
             // next to it in the array are bigger images for the full book page
             // In case we need either ISBN
         //    console.log ("ISBN 13 and 10")
@@ -93,6 +93,7 @@ function GoogleBooksAPI(){
 });
 }
 // going to try to imitate bootstrap divs and classes to see how it all goes
+// LargeView is the full page version of the book/music
 function LargeView(){
     $(".PageBody").empty()
     $(".PageBody").append($('<div />', {
@@ -110,7 +111,7 @@ function LargeView(){
     method: "GET"
     }).done(function(response) {
         var ISBN13=response.items[ItemValue].volumeInfo.industryIdentifiers[0].identifier;
-        var ISBN10=response.items[ItemValue].volumeInfo.industryIdentifiers[1].identifier;
+        
         var Author=response.items[ItemValue].volumeInfo.authors[0]
         var Title=response.items[ItemValue].volumeInfo.title
         var Image=response.items[ItemValue].volumeInfo.imageLinks.thumbnail
@@ -124,23 +125,57 @@ function LargeView(){
             var SalePrice=response.items[ItemValue].saleInfo.listPrice.amount
         }
         
-        console.log(Rating + BuyLink)
-        console.log(IsFiction)
         $("#Art").append('<img id="theImg" src='+Image+' />');
         // art image is a little small. Use ISBN number to fetch bigger one?
         $("#Content").append('<p>'+Title +'</p>'+'<p>'+IsFiction+'</p>'+'<p> Brief description:<br>'+Description+'<p>')
         if (Rating!=undefined){
-            $("#Content").append('<p> Average Rating: '+Rating+' stars</p>')
+            $("#Content").append('<p> Average Rating on Google Books: '+Rating+' stars</p>')
                                  }
         if (BuyLink!=undefined || SalePrice!=undefined){
             $("#Links").append('<p>Buy on </p>')
             $("#Links").append('<a href='+BuyLink+'> Google Play Store</a> '+SalePrice)
                                 }
-    
+        //  running good reads to get ratings from there and use the ISBN from here
+        
                                 })
+        GoodReadsGetGrID()
+        
 }
-    
 
+function GoodReadsGetGrID(){
+    console.log("Good Reads Get GR ID ran")
+    queryURL= CorsIsDumb+"https://www.goodreads.com/book/review_counts.json?isbns="+ISBN10+"&key="+GoodReadsAPIKey;
+    console.log(queryURL)
+    // after ISBN13 you can add %2C to include more books if needed
+    //queryURL=CorsIsDumb+"https://www.goodreads.com/book/isbn/"+ISBN10+"?key=YaRPBzHk1CdOfh7JjERcfg"
+$.ajax({
+    url: queryURL,
+    method: "GET"
+    }).done(function(response) {
+    GrID=response.books[0].id
+    console.log(GrID)
+
+    GoodReadsGetReviews();
+})
+
+}
+function GoodReadsGetReviews(){
+    console.log("Good reads Get Reviews ran")
+    queryURL=CorsIsDumb+"https://www.goodreads.com/book/show/"+GrID+".json?key="+GoodReadsAPIKey;
+    //queryURL=CorsIsDumb+"https://www.goodreads.com/book/show/2555.json?key=YaRPBzHk1CdOfh7JjERcfg";
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).done(function(response) {
+    console.log(response)
+    var test=response.documentElement.children[1].childNodes[55].innerHTML
+    var Rating="";
+    newtest= test.substr(16);
+    newertest = newtest.substr(0, newtest.length-10);
+    $("#Reviews").append("Please note: Reviews are for all editions of a given book."+ newertest)
+    $("#Content").append('<p> Average Rating on Google Books: '+Rating+' stars</p>')
+        })
+    }
 // These change the button to indicate we're searching by something
 // We'll add an ID to it to specify which function/api we'll be using for searching and giving back data
 $("#BAuthor").on("click", function(){
@@ -180,6 +215,12 @@ $("#MArtist").on("click", function(){
     RemoveClass()
     $("#Click").addClass("MTrack")
  })
+ // Setting it up so when you hit enter after typing a search term, it searches * you still need to have a search by term selected
+ $("#SearchTerm").keyup(function(event) {
+    if (event.keyCode === 13) {
+        $("#Click").click();
+    }
+});
  // this removes all classes that could mess up our search
 function RemoveClass(){
     for (var i=0; i<SearchableTopics.length;i++){
@@ -188,7 +229,4 @@ function RemoveClass(){
     }
     
 }
-
 })
-
-
