@@ -53,3 +53,11 @@ float: right;
 .dropdown a:hover {background-color: #ddd}
 
 .show {display:block;}
+
+#theImg{
+	height: 206px;
+	width:128px;
+}
+body {
+	background-image: url("images/placeholder.jpg");
+}
