@@ -15,26 +15,27 @@ var TopAlbums=[];
 $(document).ready(function () {
 //Fire base stuff
 
-var config = {
-    apiKey: "AIzaSyAU46IVUBlILFXNBYEFeDo8lD-1xnTWOkU",
-    authDomain: "newp-d21f6.firebaseapp.com",
-    databaseURL: "https://newp-d21f6.firebaseio.com",
-    projectId: "newp-d21f6",
-    storageBucket: "newp-d21f6.appspot.com",
-    messagingSenderId: "38732084306"
-  };
-  firebase.initializeApp(config);
-  var database = firebase.database();
+// var config = {
+//     apiKey: "AIzaSyAU46IVUBlILFXNBYEFeDo8lD-1xnTWOkU",
+//     authDomain: "newp-d21f6.firebaseapp.com",
+//     databaseURL: "https://newp-d21f6.firebaseio.com",
+//     projectId: "newp-d21f6",
+//     storageBucket: "newp-d21f6.appspot.com",
+//     messagingSenderId: "38732084306"
+//   };
+//   firebase.initializeApp(config);
+//   var database = firebase.database();
    
-  var NewSearch = {
-    author: author,
-        isbn: isbn,
-        title: title,
-        artist: artist,
-        album: album,
-  }
+//   var NewSearch = {
+//         author: FBauthor,
+//         isbn: FBisbn,
+//         title: FBtitle,
+//         artist: FBartist,
+//         album: FBalbum,
+        
+//   }
 
-  database.ref().push(NewSearch);
+//   database.ref().push(NewSearch);
 
 
 
