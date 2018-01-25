@@ -1,14 +1,21 @@
+// Move these to a better scope later if you have time
 
+var TopAlbums0=[];
+var TopAlbums1=[];
+var TopAlbums2=[];
+var TopAlbums3=[];
+var TopAlbums4=[];
 var LastFmAPIKey = "522040999d6813df673088a0da52fadd&"
 var GoodReadsAPIKey = "YaRPBzHk1CdOfh7JjERcfg"
 var CorsIsDumb="https://cors-anywhere.herokuapp.com/"
 //global scope for testing
-
+var ArtistCounter="";
 var Artist=""
 var Title=""
 var SimilarArtists=[];
 var TopAlbums=[]; 
 $(document).ready(function () {
+   
 // lets declare our functions
 function GoodReadsSearch(){
     console.log(Author +" <-- Author  Title---> "+ Title)
@@ -86,13 +93,36 @@ function GoodReadsSearch(){
                              type: 'GET',
                              url: queryURL,
                              data: 'method=artist.getinfo&' +
-                                 'artist='+SearchVariable+'&'+
+                                 'artist='+Search+'&'+
                                  'api_key=522040999d6813df673088a0da52fadd&' +
                                  'format=json',
                              dataType: 'jsonp',
                         }).done(function(response) {
-                            var Description=response
+                            console.log(response)
+                            console.log("large view ran")
+                            Artist=response.artist.name
+                            Image=response.artist.image[3]["#text"]
+                            var Bio=response.artist.bio.content
+                            $("#Content").append('<p>'+Artist+'</p>')
+                               
+                          //  $(".PageBody").append('<p> Author: '+Author)
+                          //  $(".PageBody").append('<p> ISBN: '+ISBN13)
                            
+                         //  if (Rating!=undefined){
+                          //  $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
+                        // }
+                        
+                        var length = 700;
+                        var trimmedBio = Bio.substring(0, length);
+                        trimmedBio=trimmedBio+"..."
+                            $("#Art").append('<img id="theImg" src='+Image+' />')
+                             // pads the page
+                           
+                            GetTop5albums()
+                            $("#Content").append(trimmedBio)
+                            $(".PageBody").append('<br>')
+                                    
+                            
                     })
                 }
                 //
@@ -178,7 +208,6 @@ function GoodReadsSearch(){
                     })
                 }
 
-
                 function LastFmAlbumSearch(){
                     var InitialTerm = $("#SearchTerm").val();
                     var SearchVariable = InitialTerm.replace(" ", "+");
@@ -199,23 +228,7 @@ function GoodReadsSearch(){
 
 
 
-                function GetTop5albums(){
-                    console.log(Artist)
-                  queryURL="http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+Artist+"&api_key="+LastFmAPIKey+"&format=json"
-                  $.ajax({
-                     type: 'GET',
-                     url: queryURL,
-                     data:
-                       'format=json',
-                     dataType: 'jsonp',
-                     }).done(function(response) {
-                         console.log(response)
-                         for (var i=0; i<5;i++){
-                           TopAlbums[i]=response.topalbums.album[i].name
-                         }
-                         console.log(TopAlbums)
-                     })  
-                }
+
 
 // now here is the monstrosity
 
@@ -223,18 +236,11 @@ function GoodReadsSearch(){
                             console.log("last fm ran")
                         var InitialTerm = $("#SearchTerm").val();
                         var SearchVariable = InitialTerm.replace(" ", "+");
-                        console.log(SearchVariable)
+                       // console.log(SearchVariable)
                         queryURL = "http://ws.audioscrobbler.com/2.0/"
-                                console.log(queryURL);
+                       //         console.log(queryURL);
                                 
                         $.ajax({
-                            // type: 'GET',
-                            // url: queryURL,
-                            // data: 'method=artist.getinfo&' +
-                            //     'artist='+SearchVariable+'&'+
-                            //     'api_key=522040999d6813df673088a0da52fadd&' +
-                            //     'format=json',
-                            // dataType: 'jsonp',
                             type: 'GET',
                             url: queryURL,
                             data: 'method=artist.search&' +
@@ -245,55 +251,64 @@ function GoodReadsSearch(){
                             }).done(function(response) {
                                 console.log(response)
                             
-                            //console.log(response.artist.bio.content)
-
-                            for (var i = 0; i < 5; i++) {
-                                //append Artist+i later?
-                                Artist = response.results.artistmatches.artist[i].name
-                                Image = response.results.artistmatches.artist[i].image[2]["#text"]
-                                // raise scope later
-                              //  var Genre = [response.artist.tags.tag["0"].name, response.artist.tags.tag["1"].name ]
-                                console.log(Artist)
-                                console.log(Image)
-                                    GetTop5albums()
-                                    console.log(response)
-                                    // var BioContent= response.artist.bio.content
-                                    // for (var i=0; i<4; i++){
-                                    //     SimilarArtists[i]=response.artist.similar.artist[i].name
-                                        
-                                    // }
-                                    console.log(SimilarArtists)
-                                   // GetTop5albums() why was this here?
+                             for (var ArtistCounter=0; ArtistCounter<5; ArtistCounter++) {
+                                // Counting for the next loop
+                              
+                                Artist = response.results.artistmatches.artist[ArtistCounter].name
+                                Image = response.results.artistmatches.artist[ArtistCounter].image[2]["#text"]
+                              
+                                    
                                    
-                                   // if (response.items[i].volumeInfo.industryIdentifiers[0].identifier!=undefined){
-                                        
-                                        
-                                        
                                var btn = document.createElement('button');
                                var wrapper = document.createElement('div');
                                wrapper.appendChild(btn);
                                btn.classList.add("Click");
-                               btn.classList.add("Button"+i);
-                               btn.setAttribute("ArraySlot", i );
+                               btn.classList.add("Button"+ArtistCounter);
+                               btn.setAttribute("searchvariable", Artist );
                                 $(".PageBody").append(wrapper)
                                 var buttons = wrapper.getElementsByTagName("BUTTON")
                                 buttons[0].onclick = function(){ 
-                                 ItemValue = ($(this).attr("arrayslot"));
-                                 // Takes the array slot of the book. We can rerun the query for only that array slot
-                             //    BooksLargeView()
-                             }     
+                                 Search = ($(this).attr("searchvariable"));
+                                 // Runs Music Large view
+                                  MusicLargeView()
+                                            }     
                                  // need a better button/href for the link to the "whole page"
-                                 $(".Button"+i).append('<p> Title: '+Artist+'</p>')
-                             //    $(".PageBody").append('<p> Author: '+Author)
-                             //   $(".PageBody").append('<p> Genres: '+Genre[0]+", "+Genre[1])
-                               
-                            //    if (Rating!=undefined){
-                            //     $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
-                            //  }
+                                 $(".Button"+ArtistCounter).append('<p> Title: '+Artist+'</p>')
+                                
+                                $(".PageBody").append('<p> Top Albums '+ TopAlbums+ArtistCounter+[0] +' </p>')
                                  $(".PageBody").append('<img id="theImg" src='+Image+' />')
+                                 for (var b=0;b<3; b++){
+                                    $(".PageBody").append('<br>')
                                 }
+                                 }
+
                                 })
+
+
                             }
+
+                            function GetTop5albums(){
+                                console.log(Artist)
+                              queryURL="http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+Artist+"&api_key="+LastFmAPIKey+"&format=json"
+                              $.ajax({
+                                 type: 'GET',
+                                 url: queryURL,
+                                 data:
+                                   'format=json',
+                                 dataType: 'jsonp',
+                                 }).done(function(response) {
+                                               console.log(response)
+                                $("#Content").append('<br>')
+                                $("#Content").append('<br>') 
+                                                                                
+                                $("#Content").append(' <p>Top Albums:</p>') 
+                                    for (var i=0; i<5;i++){
+                                      $("#Content").append('<p>'+response.topalbums.album[i].name+'</p>')
+                                        }
+                                 })  
+                            }
+
+
 
 
 
@@ -353,6 +368,8 @@ $("#SearchTerm").keyup(function(event) {
                                      $("#Click").addClass("MAlbum")
                                   })
 
+
+
                                   // runs the query on click/enter
                                   $("#Click").on("click", function(){
                                     $(".PageBody").empty();
@@ -360,6 +377,7 @@ $("#SearchTerm").keyup(function(event) {
                                     var SearchVariable = InitialTerm.replace(" ", "+");
                                      
                                     if ($('#Click').hasClass('MArtist')){
+                                        
                                         LastFmGetArtists()
                                         // holding onto this 
                                     } else if ($('#Click').hasClass('MAlbum')) {
