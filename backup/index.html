@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>
-        The Comfy couch corner
-    </title>
     <meta charset="UTF-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">        
         <link rel="stylesheet" type="text/css" href="style.css">
@@ -11,43 +8,36 @@
         <!-- Jquery -->
     </head>
          <script type="text/javascript" src="javascript.js"></script>
-    
+     </head>
 <body>
-        <div class="container">
-    <div class="panel col-md-8 Wall">
-            <label for="comment">Hello and welcome to the Comfy Couch Corner © or C^3
-               <p>You can search for books, authors, albums, or artists and receive back information regarding the subject. </p> 
-            </label>
-            <input placeholder="The hunger games"class="form-control" rows="1" id="SearchTerm" ></textarea>
-            
-            <div class="dropdown">
-                <button onclick="myFunction()" class="dropbtn"><p id="Filter">Searching by ...<p></button>
-                  <div id="myDropdown" class="dropdown-content">
-                    <button id="BAuthor"><p>Book Author</p> </button>
-                    <button id="BTitle"><p>Book Title</p></button>
-                    <button id="BISBN"><p>Book ISBN</p></button>
-                    <button id="MArtist"><p>Musical Artist</p></button>
-                    <button id="MAlbum"><p>Album</p></button>
-                  </div>
-                               
-                </div>
-                <div class="SearchButton Wall float btn-default" id="Click"><span ></span> Search</div> 
+        <label for="comment">Search for a book/music artist. Will add drop downs and or selectors to specify if searching artist, book, song, et cetera</label>
+        <textarea class="form-control" rows="1" id="SearchTerm" ></textarea>
+        <div class="btn-default" id="Click"><span class=""></span> Search</div>
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Search by<p id="Filter">...</p></button>
+              <div id="myDropdown" class="dropdown-content">
+                <button id="BAuthor"><p>Book Author</p> </button>
+                <button id="BTitle"><p>Book Title</p></button>
+                <button id="BISBN"><p>Book ISBN</p></button>
+                <button id="MArtist"><p>Musical Artist</p></button>
+                <button id="MAlbum"><p>Album</p></button>
+                <button id="MTrack"><p>MusicTrack?</p></button>
+              </div>
+              
             </div>
-    </div>
-        
             
     
     <div class="container">
-        <div class="row">
-            <div class="panel panel-default col-md-10 Wall"> 
-                    <div class="panel-body ">
-                        <div class="col-md-11 PageBody">
-                                        
-                        </div>
+    <div class="row">
+                    <div class="panel panel-default">
+                      
+                      <div class="panel-body">
+                          <div class="col-md-10 PageBody">
+                                          
+                          </div>
+                      </div>
+                                    
                     </div>
-                                  
-                  </div>
-                           
                              
                         
                            
@@ -57,13 +47,13 @@
                     </div>
                     <div class="container">
                             <div class="row">
-                            <div class="panel panel-default col-md-10 Wall"> 
-                                    <div class="panel-body ">
+                                    <div class="panel panel-default">
+                                                  <div class="panel-body"> 
                                                           <div class="col-md-12" id="Reviews">
                                                               </div>
                                                               
                                                                     
-                                                            
+                                                            </div>
                                                               
                                                    </div>
                                                    
@@ -72,7 +62,7 @@
                                                 </div>
                                        </div>
                                        </div>
-                                    </div>
+    
     </div>
  </div>
  <script>
@@ -81,7 +71,6 @@
     function myFunction() {
         document.getElementById("myDropdown").classList.toggle("show");
     }
-    
     </script>
 </body>
 </html>
