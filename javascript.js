@@ -16,24 +16,25 @@ $(document).ready(function () {
 //Fire base stuff
 
 var config = {
-    apiKey: "AIzaSyDecDNMTgc-u2YuNPnsrpoRQ2lOk035P-Y",
-    authDomain: "jan9th-proj.firebaseapp.com",
-    databaseURL: "https://jan9th-proj.firebaseio.com",
-    projectId: "jan9th-proj",
-    storageBucket: "jan9th-proj.appspot.com",
-    messagingSenderId: "604075862601"
+    apiKey: "AIzaSyAU46IVUBlILFXNBYEFeDo8lD-1xnTWOkU",
+    authDomain: "newp-d21f6.firebaseapp.com",
+    databaseURL: "https://newp-d21f6.firebaseio.com",
+    projectId: "newp-d21f6",
+    storageBucket: "newp-d21f6.appspot.com",
+    messagingSenderId: "38732084306"
   };
   firebase.initializeApp(config);
   var database = firebase.database();
    
   var NewSearch = {
-    TrainName: Train,
-    TrainDestination: Destination,
-    DepartureTime: Departure,
-    Frequency: Frequency
+    author: author,
+        isbn: isbn,
+        title: title,
+        artist: artist,
+        album: album,
   }
 
-  database.ref().push(NewRoute);
+  database.ref().push(NewSearch);
 
 
 
@@ -100,8 +101,8 @@ function GoodReadsSearch(){
                 if (Rating!=undefined){
                     $("#Content").append('<p> Average Rating on Google Books: '+Rating+' stars</p>')
                                          }
-                if (BuyLink!=undefined || SalePrice!=undefined){
-                    $("#Links").append('<p>Buy on </p>')
+                $("#Links").append('<p>Buy on </p>')
+                if (BuyLink!=undefined || SalePrice!=undefined){ 
                     $("#Links").append('<a href='+BuyLink+'> Google Play Store</a> '+SalePrice)
                                                                 }
                 $("#Links").append('<p> <a href="Amazon.com">Amazon</a></p>')
