@@ -1,10 +1,8 @@
 // Move these to a better scope later if you have time
 
-var TopAlbums0=[];
-var TopAlbums1=[];
-var TopAlbums2=[];
-var TopAlbums3=[];
-var TopAlbums4=[];
+var    AlbumArtist=""
+var    AlbumName=""
+var    Image=""
 var LastFmAPIKey = "522040999d6813df673088a0da52fadd&"
 var GoodReadsAPIKey = "YaRPBzHk1CdOfh7JjERcfg"
 var CorsIsDumb="https://cors-anywhere.herokuapp.com/"
@@ -86,7 +84,7 @@ function GoodReadsSearch(){
                     
 
 
-                    function MusicLargeView(){
+                    function ArtistLargeView(){
                      CreateCanvas();
                      queryURL = "http://ws.audioscrobbler.com/2.0/"
                      $.ajax({
@@ -221,10 +219,95 @@ function GoodReadsSearch(){
                     dataType: 'jsonp',
                     }).done(function(response) {
                         console.log(response)
+
+                        //for loop of grabbing and appending albums 
+                        for (var i=0; i<5; i++){
+                            AlbumArtist=response.results.albummatches.album[i].artist
+                            AlbumName=response.results.albummatches.album[i].name
+                            Image=response.results.albummatches.album[i].image[3]["#text"]
+
+                            var btn = document.createElement('button');
+                               var wrapper = document.createElement('div');
+                               wrapper.appendChild(btn);
+                               btn.classList.add("Click");
+                               btn.classList.add("Button"+i);
+                               btn.setAttribute("albumname", AlbumName );
+                               btn.setAttribute("albumartist", AlbumArtist)
+                                $(".PageBody").append(wrapper)
+                                var buttons = wrapper.getElementsByTagName("BUTTON")
+                                buttons[0].onclick = function(){ 
+                                 Search = ($(this).attr("searchvariable"));
+                                 // Runs Music Large view\
+                                 AlbumName = ($(this).attr("albumname"))
+                                console.log(AlbumName)
+                                 AlbumArtist= ($(this).attr("albumartist"))
+                                console.log(AlbumArtist)
+                                  AlbumLargeView()
+                                            }     
+                                 // need a better button/href for the link to the "whole page"
+                                 $(".Button"+i).append('<p> Album Title: '+AlbumName+'</p>')
+                                
+                                $(".PageBody").append('<p> By: '+AlbumArtist+'</p>')
+                                 $(".PageBody").append('<img id="theImg" src='+Image+' />')
+                                 for (var b=0;b<3; b++){
+                                    $(".PageBody").append('<br>')
+                                }
+                       }
                         
+
                      //   console.log(TopAlbums)
                     })
                 }
+                // LOOK OVER THIS, I JUST COPY AND PASTED IT
+                function AlbumLargeView(){
+                    // reads the attributes from the button
+                    
+                    console.log(AlbumName)
+                    console.log(AlbumArtist)
+                    CreateCanvas();
+                    queryURL = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key="+LastFmAPIKey+"&artist="+AlbumArtist+"&album="+AlbumName+"&format=json"
+                    
+                    $.ajax({
+                            type: 'GET',
+                            url: queryURL,
+                            
+                            dataType: 'jsonp',
+                       }).done(function(response) {
+                        
+                        
+                           console.log(response)
+                           console.log(queryURL)
+                           console.log("Album Largeview Ran")
+
+                           Artist=response.album.artist
+                           Image=response.album.image[5]["#text"]
+                           AlbumName=response.album.name
+                           $("#Content").append('<p> Artist: '+Artist+'</p>')
+                           $("#Content").append('<p> Album Title: '+AlbumName+'</p>')
+                           $("#Content").append('<p> Track list: </p><br>')
+                           for (i=0; i<10;i++){
+                            $("#Content").append('<p> '+ response.album.tracks.track[i].name +'</p>')
+                           }
+
+                        
+                              
+                         //  $(".PageBody").append('<p> Author: '+Author)
+                         //  $(".PageBody").append('<p> ISBN: '+ISBN13)
+                          
+                        //  if (Rating!=undefined){
+                         //  $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
+                       // }
+                      // 
+                           $("#Art").append('<img id="" src='+Image+' />')
+                            // pads the page
+                          
+                           
+                                   
+                           
+                   })
+               }
+
+
 
 
 
@@ -270,7 +353,7 @@ function GoodReadsSearch(){
                                 buttons[0].onclick = function(){ 
                                  Search = ($(this).attr("searchvariable"));
                                  // Runs Music Large view
-                                  MusicLargeView()
+                                  ArtistLargeView()
                                             }     
                                  // need a better button/href for the link to the "whole page"
                                  $(".Button"+ArtistCounter).append('<p> Title: '+Artist+'</p>')
