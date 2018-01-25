@@ -3,7 +3,7 @@ position: relative;
 float: right;
 }	
 .dropbtn {
-    background-color: #4CAF50;
+    background-color: #2d5074;
     color: white;
     padding: 16px;
     font-size: 16px;
@@ -12,11 +12,11 @@ float: right;
 }
 
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #3e8e41;
+    background-color: #4f51a7;
 }
 
 #myInput {
-    border-box: box-sizing;
+    
     background-image: url('searchicon.png');
     background-position: 14px 12px;
     background-repeat: no-repeat;
@@ -41,6 +41,8 @@ float: right;
     overflow: auto;
     border: 1px solid #ddd;
     z-index: 1;
+    height: 40px;
+    width: 445px;
 }
 
 .dropdown-content a {
@@ -61,3 +63,31 @@ float: right;
 body {
 	background-image: url("images/placeholder.jpg");
 }
+
+.dropbtn{
+width: 200px;
+height: 50px;    
+}
+.Wall{
+    background-image: url("images/background.jpg");
+}
+.form-control{
+    height: 20px;
+}
+.SearchButton{
+    Width: 100px;
+    height: 30px;
+    background: #6c72a5;
+    color: white;
+    position: relative;
+    right: -250px;
+    top: -30px;
+
+}
+#Content, #Links {
+    border: black 1px solid;
+}
+/* .float{
+    float: left;
+    position: relative;
+} */

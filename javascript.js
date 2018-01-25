@@ -27,13 +27,9 @@ function GoodReadsSearch(){
             console.log(response)
         var AppendHTML=response.reviews_widget
      
-        $("#ReviewPanel").append($('<div />', {
-            class: 'panel panel-default',
-            id: 'ReviewDiv'    }));
-        $("#ReviewDiv").append($('<div />', {
-            class: 'col-md-12 panel-body',
-            id: 'Reviews'    }));
-            $("#Reviews").empty()
+        
+        
+            $("#Reviews").empty( )
         $("#Reviews").append("Please note: Reviews are for all editions of a given book.")
             $("#Reviews").append(AppendHTML)
         })
@@ -69,9 +65,13 @@ function GoodReadsSearch(){
                     var SalePrice=response.items[ItemValue].saleInfo.listPrice.amount
                 }
                 
-                $("#Art").append('<img id="theImg" src='+Image+' />');
+                $("#Art").append('<img id="" src='+Image+' />');
                 // art image is a little small. Use ISBN number to fetch bigger one?
-                $("#Content").append('<p>'+Title +'</p>'+'<p>'+IsFiction+'</p>'+'<p> Brief description:<br>'+Description+'<p>')
+                var length = 700;
+                var trimmedDesc = Description.substring(0, length);
+                trimmedDesc=trimmedDesc+"..."
+                $("#Content").append('<p>'+Title +'</p>'+'<p>Author:'+Author +'</p>'+'<p>'+IsFiction+'</p>'+'<p> Brief description:<br>'+trimmedDesc+'<p>')
+                 
                 if (Rating!=undefined){
                     $("#Content").append('<p> Average Rating on Google Books: '+Rating+' stars</p>')
                                          }
@@ -79,6 +79,8 @@ function GoodReadsSearch(){
                     $("#Links").append('<p>Buy on </p>')
                     $("#Links").append('<a href='+BuyLink+'> Google Play Store</a> '+SalePrice)
                                                                 }
+                $("#Links").append('<p> <a href="Amazon.com">Amazon</a></p>')
+                 $("#Links").append('<p> <a href="Itunes.com"> Itunes</a></p>')                                                                
                                         })
                     }
                     
@@ -102,18 +104,11 @@ function GoodReadsSearch(){
                             Image=response.artist.image[3]["#text"]
                             var Bio=response.artist.bio.content
                             $("#Content").append('<p>'+Artist+'</p>')
-                               
-                          //  $(".PageBody").append('<p> Author: '+Author)
-                          //  $(".PageBody").append('<p> ISBN: '+ISBN13)
-                           
-                         //  if (Rating!=undefined){
-                          //  $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
-                        // }
-                        
+                            $("#Reviews").empty()
                         var length = 700;
                         var trimmedBio = Bio.substring(0, length);
                         trimmedBio=trimmedBio+"..."
-                            $("#Art").append('<img id="theImg" src='+Image+' />')
+                            $("#Art").append('<img id="" src='+Image+' />')
                              // pads the page
                            
                             GetTop5albums()
@@ -123,7 +118,6 @@ function GoodReadsSearch(){
                             
                     })
                 }
-                //
                     // creates the layout for the elements to  be inserted
                     function CreateCanvas(){
                         $(".PageBody").empty()
@@ -162,8 +156,8 @@ function GoodReadsSearch(){
                                     console.log()
                                     if (response.items[i].volumeInfo.industryIdentifiers[0].identifier!=undefined){
                                         ISBN13=response.items[i].volumeInfo.industryIdentifiers[0].identifier;
-                                        var Author=response.items[i].volumeInfo.authors[0]
-                                        var Title=response.items[i].volumeInfo.title
+                                         Author=response.items[i].volumeInfo.authors[0]
+                                         Title=response.items[i].volumeInfo.title
                                         if(response.items[i].volumeInfo.imageLinks!=undefined){
                                             var Image=response.items[i].volumeInfo.imageLinks.thumbnail
                                         }
@@ -194,9 +188,9 @@ function GoodReadsSearch(){
                                if (Rating!=undefined){
                                 $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
                              }
-                                $(".PageBody").append('<img id="theImg" src='+Image+' />')
+                                $(".PageBody").append('<img id="" src='+Image+' />')
                                  // pads the page
-                                 for (var b=0;b<5; b++){
+                                 for (var b=0;b<3; b++){
                                     $(".PageBody").append('<br>')
                                 }
 
@@ -219,7 +213,7 @@ function GoodReadsSearch(){
                     dataType: 'jsonp',
                     }).done(function(response) {
                         console.log(response)
-
+                        $(".PageBody").append("Select an Album by hitting the button with your selections name on it."+'<br><br>')
                         //for loop of grabbing and appending albums 
                         for (var i=0; i<5; i++){
                             AlbumArtist=response.results.albummatches.album[i].artist
@@ -248,7 +242,7 @@ function GoodReadsSearch(){
                                  $(".Button"+i).append('<p> Album Title: '+AlbumName+'</p>')
                                 
                                 $(".PageBody").append('<p> By: '+AlbumArtist+'</p>')
-                                 $(".PageBody").append('<img id="theImg" src='+Image+' />')
+                                 $(".PageBody").append('<img id="" src='+Image+' />')
                                  for (var b=0;b<3; b++){
                                     $(".PageBody").append('<br>')
                                 }
@@ -278,27 +272,35 @@ function GoodReadsSearch(){
                            console.log(response)
                            console.log(queryURL)
                            console.log("Album Largeview Ran")
-
+                           
                            Artist=response.album.artist
                            Image=response.album.image[5]["#text"]
                            AlbumName=response.album.name
+                           $("#Reviews").empty( )
                            $("#Content").append('<p> Artist: '+Artist+'</p>')
                            $("#Content").append('<p> Album Title: '+AlbumName+'</p>')
                            $("#Content").append('<p> Track list: </p><br>')
-                           for (i=0; i<10;i++){
-                            $("#Content").append('<p> '+ response.album.tracks.track[i].name +'</p>')
-                           }
+                        //    for (i=0; i<10;i++){
+                        //     $("#Content").append('<p> '+ (i+1)+". " + response.album.tracks.track[i].name +'</p>')
+                        //    }
+                        $("#Art").append('<img id="" src='+Image+' />')
+                        // for (var b=0;b<5; b++){
+                        //     $("#Art").append("<br>")
+                        // }
+                         $("#Links").append('<p> <a href="Amazon.com">Buy on Amazon</a></p>')
+                         $("#Links").append('<p> <a href="Itunes.com">Buy on Itunes</a></p>')
+                         $("#Links").append('<p> <a href="https://play.google.com/music/">Buy on Google Music</a></p>')
+                        for (var i=0; i<25;i++) {
+                            
+                            if (response.album.tracks.track[i].name!=undefined){
+                                $("#Content").append('<p> '+ (i+1)+". " + response.album.tracks.track[i].name +'</p>')
+                            } else {
+                                i=26;
+                            }
 
-                        
-                              
-                         //  $(".PageBody").append('<p> Author: '+Author)
-                         //  $(".PageBody").append('<p> ISBN: '+ISBN13)
-                          
-                        //  if (Rating!=undefined){
-                         //  $(".PageBody").append('<p> Average Rating: '+Rating+' stars</p>')
-                       // }
-                      // 
-                           $("#Art").append('<img id="" src='+Image+' />')
+                        } 
+
+                           
                             // pads the page
                           
                            
@@ -333,33 +335,31 @@ function GoodReadsSearch(){
                             dataType: 'jsonp',
                             }).done(function(response) {
                                 console.log(response)
-                            
+                                $(".PageBody").append("Select an artist by hitting the button with your selections name on it."+'<br><br>')
                              for (var ArtistCounter=0; ArtistCounter<5; ArtistCounter++) {
                                 // Counting for the next loop
-                              
                                 Artist = response.results.artistmatches.artist[ArtistCounter].name
                                 Image = response.results.artistmatches.artist[ArtistCounter].image[2]["#text"]
-                              
-                                    
-                                   
+
                                var btn = document.createElement('button');
                                var wrapper = document.createElement('div');
                                wrapper.appendChild(btn);
                                btn.classList.add("Click");
                                btn.classList.add("Button"+ArtistCounter);
                                btn.setAttribute("searchvariable", Artist );
+                               
                                 $(".PageBody").append(wrapper)
                                 var buttons = wrapper.getElementsByTagName("BUTTON")
                                 buttons[0].onclick = function(){ 
                                  Search = ($(this).attr("searchvariable"));
                                  // Runs Music Large view
                                   ArtistLargeView()
-                                            }     
-                                 // need a better button/href for the link to the "whole page"
-                                 $(".Button"+ArtistCounter).append('<p> Title: '+Artist+'</p>')
+                                            }
+                                                 
+                                 $(".Button"+ArtistCounter).append('<p> Name: '+Artist+'</p>')
                                 
-                                $(".PageBody").append('<p> Top Albums '+ TopAlbums+ArtistCounter+[0] +' </p>')
-                                 $(".PageBody").append('<img id="theImg" src='+Image+' />')
+                                
+                                 $(".PageBody").append('<img id="" src='+Image+' />')
                                  for (var b=0;b<3; b++){
                                     $(".PageBody").append('<br>')
                                 }
@@ -382,8 +382,7 @@ function GoodReadsSearch(){
                                  }).done(function(response) {
                                                console.log(response)
                                 $("#Content").append('<br>')
-                                $("#Content").append('<br>') 
-                                                                                
+                                $("#Content").append('<br>')                                                  
                                 $("#Content").append(' <p>Top Albums:</p>') 
                                     for (var i=0; i<5;i++){
                                       $("#Content").append('<p>'+response.topalbums.album[i].name+'</p>')
@@ -422,35 +421,35 @@ $("#SearchTerm").keyup(function(event) {
                                 // These all remove classes and add their given class from the box. as well as appending the word to the "Search by.."
                                 $("#BAuthor").on("click", function(){
                                     $("#Filter").empty()
-                                    $("#Filter").append("Author")
+                                    $("#Filter").append("Searching by Author")
                                     RemoveClass()
                                     $("#Click").addClass("BAuthor")
                                  })
                                  $("#BISBN").on("click", function(){ 
                                     $("#Filter").empty()
-                                    $("#Filter").append("ISBN")
+                                    $("#Filter").append("Searching by ISBN")
                                     RemoveClass()
                                     $("#Click").addClass("BISBN")
                                  })
                                  $("#BTitle").on("click", function(){
                                     $("#Filter").empty()
-                                    $("#Filter").append("Title")
+                                    $("#Filter").append("Searching by Title")
                                     RemoveClass()
                                     $("#Click").addClass("BTitle")
                                  })
                                  $("#MArtist").on("click", function(){
                                      $("#Filter").empty()
-                                     $("#Filter").append("Artist")
+                                     $("#Filter").append("Searching by Artist")
                                      RemoveClass()
                                      $("#Click").addClass("MArtist")
                                   })
                                   $("#MAlbum").on("click", function(){
                                      $("#Filter").empty()
-                                     $("#Filter").append("Album")
+                                     $("#Filter").append("Searching by Album")
                                      RemoveClass()
                                      $("#Click").addClass("MAlbum")
                                   })
-
+                                  
 
 
                                   // runs the query on click/enter
@@ -458,7 +457,10 @@ $("#SearchTerm").keyup(function(event) {
                                     $(".PageBody").empty();
                                     var InitialTerm = $("#SearchTerm").val();
                                     var SearchVariable = InitialTerm.replace(" ", "+");
-                                     
+                                    var    AlbumArtist=""
+                                    var    AlbumName=""
+                                    var    Image=""
+                                    $("#Reviews").empty()
                                     if ($('#Click').hasClass('MArtist')){
                                         
                                         LastFmGetArtists()
@@ -466,9 +468,7 @@ $("#SearchTerm").keyup(function(event) {
                                     } else if ($('#Click').hasClass('MAlbum')) {
                                         
                                         LastFmAlbumSearch()
-                                    } else if($('#Click').hasClass('MTrack')){
-                                        
-                                    } else {
+                                    }  else {
                                         var ISBN13=""
                                         var ISBN10=""
                                         var GrID=""
