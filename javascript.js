@@ -13,7 +13,32 @@ var Title=""
 var SimilarArtists=[];
 var TopAlbums=[]; 
 $(document).ready(function () {
+//Fire base stuff
+
+var config = {
+    apiKey: "AIzaSyDecDNMTgc-u2YuNPnsrpoRQ2lOk035P-Y",
+    authDomain: "jan9th-proj.firebaseapp.com",
+    databaseURL: "https://jan9th-proj.firebaseio.com",
+    projectId: "jan9th-proj",
+    storageBucket: "jan9th-proj.appspot.com",
+    messagingSenderId: "604075862601"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
    
+  var NewSearch = {
+    TrainName: Train,
+    TrainDestination: Destination,
+    DepartureTime: Departure,
+    Frequency: Frequency
+  }
+
+  database.ref().push(NewRoute);
+
+
+
+
+
 // lets declare our functions
 function GoodReadsSearch(){
     console.log(Author +" <-- Author  Title---> "+ Title)
@@ -88,7 +113,7 @@ function GoodReadsSearch(){
 
                     function ArtistLargeView(){
                      CreateCanvas();
-                     queryURL = "http://ws.audioscrobbler.com/2.0/"
+                     queryURL = "https://ws.audioscrobbler.com/2.0/"
                      $.ajax({
                              type: 'GET',
                              url: queryURL,
@@ -203,7 +228,7 @@ function GoodReadsSearch(){
                 function LastFmAlbumSearch(){
                     var InitialTerm = $("#SearchTerm").val();
                     var SearchVariable = InitialTerm.replace(" ", "+");
-                    queryURL = "http://ws.audioscrobbler.com/2.0/?method=album.search&album="+SearchVariable+"&api_key="+LastFmAPIKey+"&format=json"
+                    queryURL = "https://ws.audioscrobbler.com/2.0/?method=album.search&album="+SearchVariable+"&api_key="+LastFmAPIKey+"&format=json"
                     //queryURL="http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+Artist+"&api_key="+LastFmAPIKey+"&format=json"
                  $.ajax({
                     type: 'GET',
@@ -259,7 +284,7 @@ function GoodReadsSearch(){
                     console.log(AlbumName)
                     console.log(AlbumArtist)
                     CreateCanvas();
-                    queryURL = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key="+LastFmAPIKey+"&artist="+AlbumArtist+"&album="+AlbumName+"&format=json"
+                    queryURL = "https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key="+LastFmAPIKey+"&artist="+AlbumArtist+"&album="+AlbumName+"&format=json"
                     
                     $.ajax({
                             type: 'GET',
@@ -322,7 +347,7 @@ function GoodReadsSearch(){
                         var InitialTerm = $("#SearchTerm").val();
                         var SearchVariable = InitialTerm.replace(" ", "+");
                        // console.log(SearchVariable)
-                        queryURL = "http://ws.audioscrobbler.com/2.0/"
+                        queryURL = "https://ws.audioscrobbler.com/2.0/"
                        //         console.log(queryURL);
                                 
                         $.ajax({
@@ -372,7 +397,7 @@ function GoodReadsSearch(){
 
                             function GetTop5albums(){
                                 console.log(Artist)
-                              queryURL="http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+Artist+"&api_key="+LastFmAPIKey+"&format=json"
+                              queryURL="https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+Artist+"&api_key="+LastFmAPIKey+"&format=json"
                               $.ajax({
                                  type: 'GET',
                                  url: queryURL,
