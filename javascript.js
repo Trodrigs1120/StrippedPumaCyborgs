@@ -15,35 +15,65 @@ var TopAlbums=[];
 $(document).ready(function () {
 //Fire base stuff
 
-// var config = {
-//     apiKey: "AIzaSyAU46IVUBlILFXNBYEFeDo8lD-1xnTWOkU",
-//     authDomain: "newp-d21f6.firebaseapp.com",
-//     databaseURL: "https://newp-d21f6.firebaseio.com",
-//     projectId: "newp-d21f6",
-//     storageBucket: "newp-d21f6.appspot.com",
-//     messagingSenderId: "38732084306"
-//   };
-//   firebase.initializeApp(config);
-//   var database = firebase.database();
-   
-//   var NewSearch = {
-//         author: FBauthor,
-//         isbn: FBisbn,
-//         title: FBtitle,
-//         artist: FBartist,
-//         album: FBalbum,
-        
-//   }
+var config = {
+    apiKey: "AIzaSyAU46IVUBlILFXNBYEFeDo8lD-1xnTWOkU",
+    authDomain: "newp-d21f6.firebaseapp.com",
+    databaseURL: "https://newp-d21f6.firebaseio.com",
+    projectId: "newp-d21f6",
+    storageBucket: "newp-d21f6.appspot.com",
+    messagingSenderId: "38732084306"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
+  // variables for newbooksearch
+  var FBauthor="";
+  var FBisbn="";
+  var FBtitle="";
+  var FBimage="";
+  var FBartist="";
+  var FBalbum="";
+  
+  // we're going to pull the firebase info and append it to the page
+  RunFirebase()
 
-//   database.ref().push(NewSearch);
+ 
 
-
+  
 
 
 
 // lets declare our functions
+function RunFirebase(){
+    $(".PageBody").append('<p> Previous people searched for..</p>')
+    database.ref().on("child_added", function(childSnapshot, prevChildKey){
+            
+          // for (var i=0; i<5; i++){
+            if (childSnapshot.val().type=="music"){
+                console.log("it saw music")
+                var Appendartist = childSnapshot.val().artist
+                var Appendalbum = childSnapshot.val().album
+                var Appendimage=childSnapshot.val().image
+                $(".PageBody").append('<p>'+Appendartist+'<p>')
+                $(".PageBody").append('<p>'+Appendalbum+'<p>')
+                $(".PageBody").append('<img id="" src='+Appendimage+' />');
+            } else if(childSnapshot.val().type=="book") {
+                console.log("type = book")
+                var Appendtitle = childSnapshot.val().title
+                var Appendauthor = childSnapshot.val().author
+                var Appendimage=childSnapshot.val().image
+                $(".PageBody").append('<p>'+Appendtitle+'<p>')
+                $(".PageBody").append('<p>'+Appendauthor+'<p>')
+                $(".PageBody").append('<img id="" src='+Appendimage+' />');
+            } else { console.log("it couldn't tell")
+        
+            }
+       //    }
+     
+    
+            });
+ }
 function GoodReadsSearch(){
-    console.log(Author +" <-- Author  Title---> "+ Title)
+   
      queryURL = CorsIsDumb+"https://www.goodreads.com/book/title.json?author="+Author+"&key=YaRPBzHk1CdOfh7JjERcfg&title="+Title
     console.log("GoodReadsSearch")
     console.log(queryURL)
@@ -179,8 +209,23 @@ function GoodReadsSearch(){
                             url: queryURL,
                             method: "GET"
                             }).done(function(response) {
+                                FBauthor=response.items[1].volumeInfo.authors[0]
+                                FBisbn=response.items[1].volumeInfo.industryIdentifiers[0].identifier
+                                FBtitle=response.items[1].volumeInfo.title
+                                FBimage=response.items[1].volumeInfo.imageLinks.thumbnail
+                             var NewBookSearch={
+                              type: "book",
+                              author: FBauthor,
+                              isbn: FBisbn,
+                              title: FBtitle,
+                              image: FBimage
+                              }
+                              database.ref().push(NewBookSearch) 
+                              $(".PageBody").empty()
                                 for (var i = 0; i<5; i++ ){
-                                    console.log()
+                                    
+                                 
+                                  
                                     if (response.items[i].volumeInfo.industryIdentifiers[0].identifier!=undefined){
                                         ISBN13=response.items[i].volumeInfo.industryIdentifiers[0].identifier;
                                          Author=response.items[i].volumeInfo.authors[0]
@@ -198,7 +243,7 @@ function GoodReadsSearch(){
                                btn.classList.add("Click");
                                btn.classList.add("Button"+i);
                                btn.setAttribute("ArraySlot", i );
-                               $(".PageBody").append(wrapper)
+                               
                                var buttons = wrapper.getElementsByTagName("BUTTON")
                                buttons[0].onclick = function(){ 
                                 ItemValue = ($(this).attr("arrayslot"));
@@ -206,7 +251,8 @@ function GoodReadsSearch(){
                                  BooksLargeView()
                                 }     
                                 // need a better button/href for the link to the "whole page"
-                    
+                                
+                                $(".PageBody").append(wrapper)
                                 $(".Button"+i).append('<p> Title: '+Title+'</p>')
                                
                                 $(".PageBody").append('<p> Author: '+Author)
@@ -231,8 +277,7 @@ function GoodReadsSearch(){
                     var InitialTerm = $("#SearchTerm").val();
                     var SearchVariable = InitialTerm.replace(" ", "+");
                     queryURL = "https://ws.audioscrobbler.com/2.0/?method=album.search&album="+SearchVariable+"&api_key="+LastFmAPIKey+"&format=json"
-                    //queryURL="http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+Artist+"&api_key="+LastFmAPIKey+"&format=json"
-                 $.ajax({
+                     $.ajax({
                     type: 'GET',
                     url: queryURL,
                     data:
@@ -242,11 +287,28 @@ function GoodReadsSearch(){
                         console.log(response)
                         $(".PageBody").append("Select an Album by hitting the button with your selections name on it."+'<br><br>')
                         //for loop of grabbing and appending albums 
+                         // Getting firebase info
+                         FBalbum=response.results.albummatches.album[0].artist
+                         FBartist=response.results.albummatches.album[0].name
+                         FBimage=response.results.albummatches.album[0].image[3]["#text"]
+                         console.log(FBartist+ " "+FBalbum+ " "+ FBimage)
+                         var NewMusicSearch = {
+                            type:"music",
+                             artist: FBartist,
+                             album: FBalbum,
+                             image: FBimage
+                       }
+                     database.ref().push(NewMusicSearch) 
+                         
+                     $(".PageBody").empty()
                         for (var i=0; i<5; i++){
                             AlbumArtist=response.results.albummatches.album[i].artist
                             AlbumName=response.results.albummatches.album[i].name
                             Image=response.results.albummatches.album[i].image[3]["#text"]
+                           
+                            
 
+                            
                             var btn = document.createElement('button');
                                var wrapper = document.createElement('div');
                                wrapper.appendChild(btn);
@@ -279,7 +341,12 @@ function GoodReadsSearch(){
                      //   console.log(TopAlbums)
                     })
                 }
-                // LOOK OVER THIS, I JUST COPY AND PASTED IT
+         
+                
+                
+
+
+
                 function AlbumLargeView(){
                     // reads the attributes from the button
                     
