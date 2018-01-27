@@ -35,8 +35,9 @@ var config = {
   var FBalbum="";
   
   // we're going to pull the firebase info and append it to the page
+  $(".PageBody").prepend('<p> Previous people searched for..</p>')
   RunFirebase()
-
+  
  
 
   
@@ -45,7 +46,7 @@ var config = {
 
 // lets declare our functions
 function RunFirebase(){
-    $(".PageBody").append('<p> Previous people searched for..</p>')
+    
     database.ref().on("child_added", function(childSnapshot, prevChildKey){
             
           // for (var i=0; i<5; i++){
@@ -54,24 +55,25 @@ function RunFirebase(){
                 var Appendartist = childSnapshot.val().artist
                 var Appendalbum = childSnapshot.val().album
                 var Appendimage=childSnapshot.val().image
-                $(".PageBody").append('<p>'+Appendartist+'<p>')
-                $(".PageBody").append('<p>'+Appendalbum+'<p>')
+                $(".PageBody").append('<p>Album Artist: '+Appendartist+'<p>')
+                $(".PageBody").append('<p>Album Name: '+Appendalbum+'<p>')
                 $(".PageBody").append('<img id="" src='+Appendimage+' />');
             } else if(childSnapshot.val().type=="book") {
                 console.log("type = book")
                 var Appendtitle = childSnapshot.val().title
                 var Appendauthor = childSnapshot.val().author
                 var Appendimage=childSnapshot.val().image
-                $(".PageBody").append('<p>'+Appendtitle+'<p>')
-                $(".PageBody").append('<p>'+Appendauthor+'<p>')
+                $(".PageBody").append('<p>Title: '+Appendtitle+'<p>')
+                $(".PageBody").append('<p>Book Author: '+Appendauthor+'<p>')
                 $(".PageBody").append('<img id="" src='+Appendimage+' />');
             } else { console.log("it couldn't tell")
         
             }
        //    }
      
-    
+             
             });
+            
  }
 function GoodReadsSearch(){
    
