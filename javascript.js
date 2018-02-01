@@ -173,7 +173,7 @@ function GoodReadsSearch(){
                            
                             GetTop5albums()
                             $("#Content").append(trimmedBio)
-                            $("#Content").append('<p> For full bio see <a href='+response.artist.bio.links.link.href+'> here a>')
+                            $("#Content").append('<p> For full bio see <a href='+response.artist.bio.links.link.href+'> here')
                             $(".PageBody").append('<br>')
                                     
                             
