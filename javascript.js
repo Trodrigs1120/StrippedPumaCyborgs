@@ -55,8 +55,8 @@ function RunFirebase(){
                 var Appendartist = childSnapshot.val().artist
                 var Appendalbum = childSnapshot.val().album
                 var Appendimage=childSnapshot.val().image
-                $(".PageBody").append('<p>Album Artist: '+Appendartist+'<p>')
-                $(".PageBody").append('<p>Album Name: '+Appendalbum+'<p>')
+                $(".PageBody").append('<p>Album Name: '+Appendartist+'<p>')
+                $(".PageBody").append('<p>Album Artist: '+Appendalbum+'<p>')
                 $(".PageBody").append('<img id="" src='+Appendimage+' />');
             } else if(childSnapshot.val().type=="book") {
                 console.log("type = book")
@@ -489,7 +489,7 @@ function GoodReadsSearch(){
                                 $("#Content").append('<br>')                                                  
                                 $("#Content").append(' <p>Top Albums:</p>') 
                                     for (var i=0; i<5;i++){
-                                      $("#Content").append('<p>'+response.topalbums.album[i].name+'  <a href="'+ response.topalbums.album[i].url+'">View on Last.fm</a>  </p>')
+                                      $("#Content").append('<p>'+response.topalbums.album[i].name+'  <a href="'+ response.topalbums.album[i].url+'" target="_blank" >View on Last.fm</a>  </p>')
                                       $("#Content").append('<img src='+response.topalbums.album[i].image["1"]["#text"]+' </img>')  
                                     }
                                  })  
