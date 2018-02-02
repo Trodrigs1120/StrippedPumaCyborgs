@@ -173,6 +173,7 @@ function GoodReadsSearch(){
                            
                             GetTop5albums()
                             $("#Content").append(trimmedBio)
+                            $("#Content").append('<p> For full bio see <a href='+response.artist.bio.links.link.href+' target="_blank"> here')
                             $(".PageBody").append('<br>')
                                     
                             
@@ -384,9 +385,9 @@ function GoodReadsSearch(){
                         // for (var b=0;b<5; b++){
                         //     $("#Art").append("<br>")
                         // }
-                         $("#Links").append('<p> <a href="Amazon.com" target="_blank">Buy on Amazon</a></p>')
-                         $("#Links").append('<p> <a href="Itunes.com" target="_blank">Buy on Itunes</a></p>')
-                         $("#Links").append('<p> <a href="https://play.google.com/music/" target="_blank">Buy on Google Music</a></p>')
+                         $("#Links").append('<p> <a href="Amazon.com">Buy on Amazon</a></p>')
+                         $("#Links").append('<p> <a href="Itunes.com">Buy on Itunes</a></p>')
+                         $("#Links").append('<p> <a href="https://play.google.com/music/">Buy on Google Music</a></p>')
                         for (var i=0; i<25;i++) {
                             
                             if (response.album.tracks.track[i].name!=undefined){
@@ -435,9 +436,15 @@ function GoodReadsSearch(){
                                 $(".PageBody").append("Select an artist by hitting the button with your selections name on it."+'<br><br>')
                              for (var ArtistCounter=0; ArtistCounter<5; ArtistCounter++) {
                                 // Counting for the next loop
-                                Artist = response.results.artistmatches.artist[ArtistCounter].name
-                                Image = response.results.artistmatches.artist[ArtistCounter].image[2]["#text"]
+                                if (response.results.artistmatches.artist[ArtistCounter].image[2]["#text"]===""){
+                                    Image = "images/book.gif" 
+                                }else {
+                                    Artist = response.results.artistmatches.artist[ArtistCounter].name
+                                    Image = response.results.artistmatches.artist[ArtistCounter].image[2]["#text"]
+                                }
 
+                                
+                                
                                var btn = document.createElement('button');
                                var wrapper = document.createElement('div');
                                wrapper.appendChild(btn);
@@ -482,8 +489,9 @@ function GoodReadsSearch(){
                                 $("#Content").append('<br>')                                                  
                                 $("#Content").append(' <p>Top Albums:</p>') 
                                     for (var i=0; i<5;i++){
-                                      $("#Content").append('<p>'+response.topalbums.album[i].name+'</p>')
-                                        }
+                                      $("#Content").append('<p>'+response.topalbums.album[i].name+'  <a href="'+ response.topalbums.album[i].url+'">View on Last.fm</a>  </p>')
+                                      $("#Content").append('<img src='+response.topalbums.album[i].image["1"]["#text"]+' </img>')  
+                                    }
                                  })  
                             }
 
