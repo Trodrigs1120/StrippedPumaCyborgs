@@ -384,9 +384,9 @@ function GoodReadsSearch(){
                         // for (var b=0;b<5; b++){
                         //     $("#Art").append("<br>")
                         // }
-                         $("#Links").append('<p> <a href="Amazon.com">Buy on Amazon</a></p>')
-                         $("#Links").append('<p> <a href="Itunes.com">Buy on Itunes</a></p>')
-                         $("#Links").append('<p> <a href="https://play.google.com/music/">Buy on Google Music</a></p>')
+                         $("#Links").append('<p> <a href="Amazon.com" target="_blank">Buy on Amazon</a></p>')
+                         $("#Links").append('<p> <a href="Itunes.com" target="_blank">Buy on Itunes</a></p>')
+                         $("#Links").append('<p> <a href="https://play.google.com/music/" target="_blank">Buy on Google Music</a></p>')
                         for (var i=0; i<25;i++) {
                             
                             if (response.album.tracks.track[i].name!=undefined){
