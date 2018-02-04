@@ -60,10 +60,9 @@ function snapshotToArray(snapshot) {
 function RunFirebase(){
     // var PrevSwitch=true;
     firebase.database().ref().on('value', function(snapshot) {
-        console.log(snapshotToArray(snapshot));
         var fbarray=snapshotToArray(snapshot)
         console.log(fbarray)
-        console.log(fbarray[1].type)
+        
         // rewrite below to append the stuff to the page and loop it 5 times
             for (var i=0; i<fbarray.length; i++){
                 if (fbarray[i].type==="music"){
@@ -92,36 +91,9 @@ function RunFirebase(){
     }, function(errorObject) {
         console.log("The read failed: " + errorObject.code);
       });
+      
     }
-    // database.ref().on("child_added").then(function(childSnapshot, prevChildKey){
-            
-         
-            // if (childSnapshot.val().type=="music"){
-            //     console.log("it saw music")
-            //     var Appendartist = childSnapshot.val().artist
-            //     var Appendalbum = childSnapshot.val().album
-            //     var Appendimage=childSnapshot.val().image
-            //     $(".PageBody").prepend('<p>Album Name: '+Appendartist+'<p>')
-            //     $(".PageBody").prepend('<p>Album Artist: '+Appendalbum+'<p>')
-            //     $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
-                
-
-            // } else if(childSnapshot.val().type=="book") {
-            //     console.log("type = book")
-            //     var Appendtitle = childSnapshot.val().title
-            //     var Appendauthor = childSnapshot.val().author
-            //     var Appendimage=childSnapshot.val().image
-            //     $(".PageBody").prepend('<p>Title: '+Appendtitle+'<p>')
-            //     $(".PageBody").prepend('<p>Book Author: '+Appendauthor+'<p>')
-            //     $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
-            //     }
-            //     else { console.log("it couldn't tell")
-            //     }
-       
-            //         if (PrevSwitch===true){
-            //         $(".PageBody").prepend('<h2> Previous people searched for..</h2>')
-            //         PrevSwitch=false;
-            //         }
+   
        
      
                     
