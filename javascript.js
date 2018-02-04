@@ -35,7 +35,7 @@ var config = {
   var FBalbum="";
   
   // we're going to pull the firebase info and append it to the page
-  $(".PageBody").prepend('<p> Previous people searched for..</p>')
+  
   RunFirebase()
   
  
@@ -45,36 +45,86 @@ var config = {
 
 
 // lets declare our functions
+function snapshotToArray(snapshot) {
+    var returnArr = [];
+
+    snapshot.forEach(function(childSnapshot) {
+        var item = childSnapshot.val();
+        item.key = childSnapshot.key;
+
+        returnArr.push(item);
+    });
+
+    return returnArr;
+};
 function RunFirebase(){
+    // var PrevSwitch=true;
+    firebase.database().ref().on('value', function(snapshot) {
+        console.log(snapshotToArray(snapshot));
+        var fbarray=snapshotToArray(snapshot)
+        console.log(fbarray)
+        console.log(fbarray[1].type)
+            for (var i=1; i<snapshot.length; i++){
+                if (snapshot[i].type==="music"){
+                    console.log("it saw music")
+                    // var Appendartist = childSnapshot.val().artist
+                    // var Appendalbum = childSnapshot.val().album
+                    // var Appendimage=childSnapshot.val().image
+                    // $(".PageBody").prepend('<p>Album Name: '+Appendartist+'<p>')
+                    // $(".PageBody").prepend('<p>Album Artist: '+Appendalbum+'<p>')
+                    // $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
+                    
     
-    database.ref().on("child_added", function(childSnapshot, prevChildKey){
+                } else if(snapshot[i].type==="book") {
+                    console.log("type = book")
+                    // var Appendtitle = childSnapshot.val().title
+                    // var Appendauthor = childSnapshot.val().author
+                    // var Appendimage=childSnapshot.val().image
+                    // $(".PageBody").prepend('<p>Title: '+Appendtitle+'<p>')
+                    // $(".PageBody").prepend('<p>Book Author: '+Appendauthor+'<p>')
+                    // $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
+                    }
+                    else { console.log("it couldn't tell")
+                    console.log(childSnapshot.val())
+                    }
+                }
+    }, function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      });
+    }
+    // database.ref().on("child_added").then(function(childSnapshot, prevChildKey){
             
-          // for (var i=0; i<5; i++){
-            if (childSnapshot.val().type=="music"){
-                console.log("it saw music")
-                var Appendartist = childSnapshot.val().artist
-                var Appendalbum = childSnapshot.val().album
-                var Appendimage=childSnapshot.val().image
-                $(".PageBody").append('<p>Album Name: '+Appendartist+'<p>')
-                $(".PageBody").append('<p>Album Artist: '+Appendalbum+'<p>')
-                $(".PageBody").append('<img id="" src='+Appendimage+' />');
-            } else if(childSnapshot.val().type=="book") {
-                console.log("type = book")
-                var Appendtitle = childSnapshot.val().title
-                var Appendauthor = childSnapshot.val().author
-                var Appendimage=childSnapshot.val().image
-                $(".PageBody").append('<p>Title: '+Appendtitle+'<p>')
-                $(".PageBody").append('<p>Book Author: '+Appendauthor+'<p>')
-                $(".PageBody").append('<img id="" src='+Appendimage+' />');
-            } else { console.log("it couldn't tell")
-        
-            }
-       //    }
+         
+            // if (childSnapshot.val().type=="music"){
+            //     console.log("it saw music")
+            //     var Appendartist = childSnapshot.val().artist
+            //     var Appendalbum = childSnapshot.val().album
+            //     var Appendimage=childSnapshot.val().image
+            //     $(".PageBody").prepend('<p>Album Name: '+Appendartist+'<p>')
+            //     $(".PageBody").prepend('<p>Album Artist: '+Appendalbum+'<p>')
+            //     $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
+                
+
+            // } else if(childSnapshot.val().type=="book") {
+            //     console.log("type = book")
+            //     var Appendtitle = childSnapshot.val().title
+            //     var Appendauthor = childSnapshot.val().author
+            //     var Appendimage=childSnapshot.val().image
+            //     $(".PageBody").prepend('<p>Title: '+Appendtitle+'<p>')
+            //     $(".PageBody").prepend('<p>Book Author: '+Appendauthor+'<p>')
+            //     $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
+            //     }
+            //     else { console.log("it couldn't tell")
+            //     }
+       
+            //         if (PrevSwitch===true){
+            //         $(".PageBody").prepend('<h2> Previous people searched for..</h2>')
+            //         PrevSwitch=false;
+            //         }
+       
      
-             
-            });
-            
- }
+                    
+    
 function GoodReadsSearch(){
    
      queryURL = CorsIsDumb+"https://www.goodreads.com/book/title.json?author="+Author+"&key=YaRPBzHk1CdOfh7JjERcfg&title="+Title
