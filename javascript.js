@@ -64,28 +64,29 @@ function RunFirebase(){
         var fbarray=snapshotToArray(snapshot)
         console.log(fbarray)
         console.log(fbarray[1].type)
-            for (var i=1; i<snapshot.length; i++){
-                if (snapshot[i].type==="music"){
+        // rewrite below to append the stuff to the page and loop it 5 times
+            for (var i=0; i<fbarray.length; i++){
+                if (fbarray[i].type==="music"){
                     console.log("it saw music")
-                    // var Appendartist = childSnapshot.val().artist
-                    // var Appendalbum = childSnapshot.val().album
-                    // var Appendimage=childSnapshot.val().image
-                    // $(".PageBody").prepend('<p>Album Name: '+Appendartist+'<p>')
-                    // $(".PageBody").prepend('<p>Album Artist: '+Appendalbum+'<p>')
-                    // $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
+                    var Appendartist = fbarray[i].artist
+                    var Appendalbum = fbarray[i].album
+                    var Appendimage= fbarray[i].image
+                    $(".PageBody").prepend('<p>Album Name: '+Appendartist+'<p>')
+                    $(".PageBody").prepend('<p>Album Artist: '+Appendalbum+'<p>')
+                    $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
                     
     
-                } else if(snapshot[i].type==="book") {
+                } else if(fbarray[i].type==="book") {
                     console.log("type = book")
-                    // var Appendtitle = childSnapshot.val().title
-                    // var Appendauthor = childSnapshot.val().author
-                    // var Appendimage=childSnapshot.val().image
-                    // $(".PageBody").prepend('<p>Title: '+Appendtitle+'<p>')
-                    // $(".PageBody").prepend('<p>Book Author: '+Appendauthor+'<p>')
-                    // $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
+                    var Appendtitle = fbarray[i].title
+                    var Appendauthor = fbarray[i].author
+                    var Appendimage= fbarray[i].image
+                    $(".PageBody").prepend('<p>Title: '+Appendtitle+'<p>')
+                    $(".PageBody").prepend('<p>Book Author: '+Appendauthor+'<p>')
+                    $(".PageBody").prepend('<img id="" src='+Appendimage+' />');
                     }
                     else { console.log("it couldn't tell")
-                    console.log(childSnapshot.val())
+                    
                     }
                 }
     }, function(errorObject) {
